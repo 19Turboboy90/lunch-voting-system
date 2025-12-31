@@ -1,0 +1,54 @@
+package ru.zhidev.lunch_voting_system.restaurant.web;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.zhidev.lunch_voting_system.restaurant.model.Restaurant;
+import ru.zhidev.lunch_voting_system.restaurant.service.RestaurantService;
+
+import java.net.URI;
+
+import static ru.zhidev.lunch_voting_system.common.validation.ValidationUtil.assureIdConsistent;
+
+@RestController
+@RequestMapping(value = AdminRestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
+@RequiredArgsConstructor
+public class AdminRestaurantRestController {
+
+    static final String REST_URL = "/api/admin/restaurants";
+
+    private final RestaurantService service;
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Restaurant> save(@Valid @RequestBody Restaurant restaurant) {
+        log.info("create {}", restaurant);
+        Restaurant created = service.save(restaurant);
+
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
+        log.info("update {} with id={}", restaurant, id);
+        assureIdConsistent(restaurant, id);
+        service.update(restaurant);
+    }
+
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id) {
+        log.info("delete {}", id);
+        service.delete(id);
+    }
+}

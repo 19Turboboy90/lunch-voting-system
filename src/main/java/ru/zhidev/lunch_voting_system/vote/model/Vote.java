@@ -1,6 +1,7 @@
 package ru.zhidev.lunch_voting_system.vote.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -32,5 +33,6 @@ public class Vote extends BaseEntity {
     private User user;
 
     @Column(name = "date_of_vote", nullable = false)
+    @NotNull
     private LocalDate dateOfVote;
 }
