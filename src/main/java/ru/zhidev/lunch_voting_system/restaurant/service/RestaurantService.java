@@ -27,6 +27,7 @@ public class RestaurantService {
     public void update(Restaurant restaurant) {
         log.info("update {}", restaurant);
         repository.getExisted(restaurant.getId());
+        repository.save(restaurant);
     }
 
     @Transactional

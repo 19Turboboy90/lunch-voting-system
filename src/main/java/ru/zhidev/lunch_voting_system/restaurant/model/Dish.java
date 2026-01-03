@@ -1,8 +1,8 @@
 package ru.zhidev.lunch_voting_system.restaurant.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,11 +24,11 @@ public class Dish extends NamedEntity {
 
     @Column(name = "price", nullable = false)
     @NotNull
-    @Min(value = 1)
+    @Positive
     private BigDecimal price;
 
     @Column(name = "description")
-    @Size(min = 0, max = 240)
+    @Size(max = 240)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
