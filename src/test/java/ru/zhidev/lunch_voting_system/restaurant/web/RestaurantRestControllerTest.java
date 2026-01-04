@@ -1,12 +1,10 @@
 package ru.zhidev.lunch_voting_system.restaurant.web;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.zhidev.lunch_voting_system.AbstractControllerTest;
-import ru.zhidev.lunch_voting_system.restaurant.service.RestaurantService;
 
 import java.util.Collections;
 
@@ -14,15 +12,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.zhidev.lunch_voting_system.restaurant.RestaurantTestData.*;
-import static ru.zhidev.lunch_voting_system.restaurant.web.RestaurantController.REST_URL;
+import static ru.zhidev.lunch_voting_system.restaurant.web.RestaurantRestController.REST_URL;
 import static ru.zhidev.lunch_voting_system.user.UserTestData.USER_MAIL;
 
-class RestaurantControllerTest extends AbstractControllerTest {
+class RestaurantRestControllerTest extends AbstractControllerTest {
 
     private static final String REST_URL_SLASH = REST_URL + '/';
-
-    @Autowired
-    private RestaurantService service;
 
     @Test
     @WithUserDetails(value = USER_MAIL)
@@ -55,7 +50,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void getByName() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "/search?name=restaurant"))
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "search?name=restaurant"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -65,7 +60,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void getByNameNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "/search?name=notfound"))
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "search?name=notfound"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

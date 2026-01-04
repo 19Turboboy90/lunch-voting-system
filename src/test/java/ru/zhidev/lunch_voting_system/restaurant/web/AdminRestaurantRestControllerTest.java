@@ -89,7 +89,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void deleteWithoutAccessRights() throws Exception {
-        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT_ID))
+        perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + RESTAURANT_ID))
                 .andExpect(status().isForbidden());
     }
 

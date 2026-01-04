@@ -14,9 +14,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = MenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-public class MenuController {
+public class MenuRestController {
 
     static final String REST_URL = "/api/restaurants/{restaurantId}/menus";
 
@@ -24,7 +24,7 @@ public class MenuController {
 
     @GetMapping
     public List<Menu> getAll(@PathVariable int restaurantId) {
-        log.info("getAll");
+        log.info("getAll: restaurantId  = {}", restaurantId);
         return service.getAll(restaurantId);
     }
 

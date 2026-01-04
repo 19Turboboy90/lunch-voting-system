@@ -44,8 +44,8 @@ public class MenuService {
     @Transactional
     public void delete(int menuId, int restaurantId) {
         log.info("delete: menuId = {}", menuId);
-        restaurantRepository.getReferenceById(restaurantId);
-        repository.deleteExisted(menuId);
+        Menu menu = getById(menuId, restaurantId);
+        repository.deleteExisted(menu.getId());
     }
 
     public List<Menu> getAll(int restaurantId) {

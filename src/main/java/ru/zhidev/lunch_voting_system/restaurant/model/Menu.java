@@ -22,10 +22,6 @@ public class Menu extends NamedEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    public Menu(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
     public Menu(Integer id, String name, Restaurant restaurant) {
         super(id, name);
         this.restaurant = restaurant;
