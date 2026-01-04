@@ -36,10 +36,10 @@ public class Dish extends NamedEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Menu menu;
 
-    public Dish(BigDecimal price, String description, Menu menu) {
+    public Dish(Integer id, String name, BigDecimal price, String description) {
+        super(id, name);
         this.price = price;
         this.description = description;
-        this.menu = menu;
     }
 
     public Dish(Integer id, String name, BigDecimal price, String description, Menu menu) {

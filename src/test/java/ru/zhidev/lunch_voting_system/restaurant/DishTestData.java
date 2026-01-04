@@ -1,0 +1,31 @@
+package ru.zhidev.lunch_voting_system.restaurant;
+
+import ru.zhidev.lunch_voting_system.MatcherFactory;
+import ru.zhidev.lunch_voting_system.restaurant.model.Dish;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+public class DishTestData {
+    public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Dish.class, "menu");
+
+    public static final int DISH_ID = 1;
+
+    public static final int NOT_FOUND = 100;
+
+    public static final Dish dish1 = new Dish(DISH_ID, "egg", new BigDecimal("12.12"), "egg");
+    public static final Dish dish2 = new Dish(DISH_ID + 1, "milk", new BigDecimal("4.50"), "milk");
+    public static final Dish dish3 = new Dish(DISH_ID + 2, "cookie", new BigDecimal("15.20"), "cookie");
+    public static final Dish dish4 = new Dish(DISH_ID + 3, "soda", new BigDecimal("10.00"), "soda");
+
+    public static final List<Dish> dishesForFirstMenu = List.of(dish1, dish2);
+    public static final List<Dish> dishesForSecondMenu = List.of(dish3, dish4);
+
+    public static Dish getNew() {
+        return new Dish(null, "newName", new BigDecimal("12.12"), "new description");
+    }
+
+    public static Dish getUpdated() {
+        return new Dish(DISH_ID, "updateName", new BigDecimal("10"), "update description");
+    }
+}
