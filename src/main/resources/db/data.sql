@@ -23,5 +23,5 @@ VALUES ('egg', 12.12, 'egg', 1),
        ('soda', 10, 'soda', 2);
 
 INSERT INTO vote(user_id, restaurant_id, date_of_vote)
-VALUES (1, 1, '2025-12-31'),
-       (2, 1, '2025-12-31');
+VALUES (1, 1, CURRENT_DATE),
+       (2, 2, CURRENT_DATE);

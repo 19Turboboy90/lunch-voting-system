@@ -2,7 +2,10 @@ package ru.zhidev.lunch_voting_system.vote.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.zhidev.lunch_voting_system.common.model.BaseEntity;
@@ -18,7 +21,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class Vote extends BaseEntity {
 
@@ -35,4 +37,17 @@ public class Vote extends BaseEntity {
     @Column(name = "date_of_vote", nullable = false)
     @NotNull
     private LocalDate dateOfVote;
+
+    public Vote(Integer id, Restaurant restaurant, User user, LocalDate dateOfVote) {
+        super(id);
+        this.restaurant = restaurant;
+        this.user = user;
+        this.dateOfVote = dateOfVote;
+    }
+
+    public Vote(Restaurant restaurant, User user, LocalDate dateOfVote) {
+        this.restaurant = restaurant;
+        this.user = user;
+        this.dateOfVote = dateOfVote;
+    }
 }
