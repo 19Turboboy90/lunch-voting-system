@@ -41,7 +41,7 @@ public class VoteRestController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @GetMapping("/winner")
+    @GetMapping("/winners")
     public List<VoteReadTo> getWinnerByDate(@RequestParam LocalDate date) {
         log.info("getWinner: date = {}", date);
         return service.calculateResult(date);

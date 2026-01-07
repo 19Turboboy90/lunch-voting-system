@@ -1,6 +1,5 @@
 package ru.zhidev.lunch_voting_system.restaurant.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class DishService {
     private final MenuService menuService;
 
     @Transactional
-    public Dish save(@Valid DishTo dishTo, int menuId, int restaurantId) {
+    public Dish save(DishTo dishTo, int menuId, int restaurantId) {
         log.info("save: dishTo = {}, menuId = {}, restaurantId =  {}", dishTo, menuId, restaurantId);
         Menu menu = menuService.getById(menuId, restaurantId);
 
@@ -35,7 +34,7 @@ public class DishService {
 
 
     @Transactional
-    public void update(@Valid DishTo dishTo, int menuId, int restaurantId) {
+    public void update(DishTo dishTo, int menuId, int restaurantId) {
         log.info("update: dishTo = {}, menuId = {}, restaurantId =  {}", dishTo, menuId, restaurantId);
         Menu menu = menuService.getById(menuId, restaurantId);
         Dish dish = getDish(dishTo.getId(), menu.getId());
