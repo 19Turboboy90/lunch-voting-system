@@ -11,7 +11,7 @@ import ru.zhidev.lunch_voting_system.common.util.JsonUtil;
 import ru.zhidev.lunch_voting_system.restaurant.RestaurantTestData;
 import ru.zhidev.lunch_voting_system.user.UserTestData;
 import ru.zhidev.lunch_voting_system.vote.model.Vote;
-import ru.zhidev.lunch_voting_system.vote.to.VoteReadTo;
+import ru.zhidev.lunch_voting_system.vote.to.VoteReadWinnerTo;
 import ru.zhidev.lunch_voting_system.vote.to.VoteWriteTo;
 
 import java.time.LocalDate;
@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.zhidev.lunch_voting_system.user.UserTestData.GUEST_MAIL;
 import static ru.zhidev.lunch_voting_system.user.UserTestData.USER_MAIL;
+import static ru.zhidev.lunch_voting_system.vote.VoteTestData.*;
 import static ru.zhidev.lunch_voting_system.vote.web.VoteRestController.REST_URL;
 
 class VoteRestControllerTest extends AbstractControllerTest {
@@ -34,7 +35,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(newVote)))
                 .andExpect(status().isCreated());
 
-        Vote created = MatcherFactory.usingEqualsComparator(Vote.class).readFromJson(action);
+        Vote created = VOTE_MATCHER.readFromJson(action);
 
         assertEquals(RestaurantTestData.RESTAURANT_ID, created.getRestaurant().getId());
 
@@ -57,12 +58,10 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void calculateResult() throws Exception {
-        VoteReadTo winner1 = new VoteReadTo(LocalDate.now(), RestaurantTestData.restaurant1.getName(), 1);
-        VoteReadTo winner2 = new VoteReadTo(LocalDate.now(), RestaurantTestData.restaurant2.getName(), 1);
         perform(MockMvcRequestBuilders.get(REST_URL + "/winners")
                 .param("date", LocalDate.now().toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MatcherFactory.usingEqualsComparator(VoteReadTo.class).contentJson(winner2, winner1));
+                .andExpect(MatcherFactory.usingEqualsComparator(VoteReadWinnerTo.class).contentJson(winner2, winner1));
     }
 }

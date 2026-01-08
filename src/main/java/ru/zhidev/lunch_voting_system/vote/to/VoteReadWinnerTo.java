@@ -1,16 +1,9 @@
 package ru.zhidev.lunch_voting_system.vote.to;
 
-import lombok.Builder;
-
 import java.time.LocalDate;
 
-@Builder
-public record VoteReadTo(
+public record VoteReadWinnerTo(
         LocalDate date,
         String restaurantName,
-
-        String userName,
-
-        String email
-) {
+        int numberOfVotes) {
 }

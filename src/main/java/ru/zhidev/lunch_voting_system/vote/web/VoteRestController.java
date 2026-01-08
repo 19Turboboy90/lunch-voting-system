@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.zhidev.lunch_voting_system.app.AuthUser;
 import ru.zhidev.lunch_voting_system.vote.model.Vote;
 import ru.zhidev.lunch_voting_system.vote.service.VoteService;
-import ru.zhidev.lunch_voting_system.vote.to.VoteReadTo;
+import ru.zhidev.lunch_voting_system.vote.to.VoteReadWinnerTo;
 import ru.zhidev.lunch_voting_system.vote.to.VoteWriteTo;
 
 import java.net.URI;
@@ -42,7 +42,7 @@ public class VoteRestController {
     }
 
     @GetMapping("/winners")
-    public List<VoteReadTo> getWinnerByDate(@RequestParam LocalDate date) {
+    public List<VoteReadWinnerTo> getWinnerByDate(@RequestParam LocalDate date) {
         log.info("getWinner: date = {}", date);
         return service.calculateResult(date);
     }

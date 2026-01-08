@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.zhidev.lunch_voting_system.common.error.NotFoundException;
 import ru.zhidev.lunch_voting_system.restaurant.model.Restaurant;
 import ru.zhidev.lunch_voting_system.restaurant.repository.RestaurantRepository;
 import ru.zhidev.lunch_voting_system.user.model.User;
@@ -12,13 +13,14 @@ import ru.zhidev.lunch_voting_system.vote.error.VoteTimeExpiredException;
 import ru.zhidev.lunch_voting_system.vote.model.Vote;
 import ru.zhidev.lunch_voting_system.vote.repository.VoteRepository;
 import ru.zhidev.lunch_voting_system.vote.to.VoteReadTo;
+import ru.zhidev.lunch_voting_system.vote.to.VoteReadWinnerTo;
+import ru.zhidev.lunch_voting_system.vote.util.VoteUtil;
 
+import java.time.Clock;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 public class VoteService {
     private static final LocalTime DEADLINE = LocalTime.of(11, 0);
 
+    private final Clock clock;
     private final VoteRepository repository;
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
@@ -36,33 +39,15 @@ public class VoteService {
     public Vote saveOrUpdate(int restaurantId, int userId) {
         log.info("saveOrUpdate:  restaurantId =  {}, userId = {}", restaurantId, userId);
 
-        final LocalDateTime localDateTime = LocalDateTime.now();
-        final LocalDate dateOfVote = localDateTime.toLocalDate();
-        final LocalTime timeOfVote = localDateTime.toLocalTime();
+        final LocalDate dateOfVote = LocalDate.now(clock);
+        final LocalTime timeOfVote = LocalTime.now(clock);
 
         User user = userRepository.getExisted(userId);
         Restaurant restaurant = restaurantRepository.getExisted(restaurantId);
-        Optional<Vote> getExistVote = repository.getByUserIdAndDate(user.getId(), dateOfVote);
 
-        return getExistVote
+        return repository.getByUserIdAndDate(user.getId(), dateOfVote)
                 .map(vote -> updateVote(timeOfVote, vote, restaurant))
                 .orElseGet(() -> repository.save(new Vote(null, restaurant, user, dateOfVote)));
-    }
-
-    public List<VoteReadTo> calculateResult(LocalDate date) {
-        Map<Restaurant, Integer> restaurantsWithPoints = repository.getByDate(date)
-                .stream()
-                .collect(Collectors.groupingBy(Vote::getRestaurant, Collectors.summingInt(v -> 1)));
-
-        int maxPoint = restaurantsWithPoints.values().stream()
-                .mapToInt(Integer::intValue)
-                .max()
-                .orElse(0);
-
-        return restaurantsWithPoints.entrySet().stream()
-                .filter(v -> v.getValue() == maxPoint)
-                .map(ob -> new VoteReadTo(date, ob.getKey().getName(), maxPoint))
-                .toList();
     }
 
     private Vote updateVote(LocalTime timeOfVote, Vote vote, Restaurant restaurant) {
@@ -72,5 +57,39 @@ public class VoteService {
 
         vote.setRestaurant(restaurant);
         return repository.save(vote);
+    }
+
+    public List<VoteReadWinnerTo> calculateResult(LocalDate date) {
+        log.info("calculateResult:  date =  {}", date);
+        Map<Restaurant, Integer> restaurantsWithPoints = getRestaurantsWithPoints(date);
+
+        int maxPoint = getMaxPoint(restaurantsWithPoints);
+
+        return restaurantsWithPoints.entrySet().stream()
+                .filter(v -> v.getValue() == maxPoint)
+                .map(ob -> new VoteReadWinnerTo(date, ob.getKey().getName(), maxPoint))
+                .toList();
+    }
+
+    private Map<Restaurant, Integer> getRestaurantsWithPoints(LocalDate date) {
+        return repository.getByDate(date)
+                .stream()
+                .collect(Collectors.groupingBy(Vote::getRestaurant, Collectors.summingInt(v -> 1)));
+    }
+
+    private int getMaxPoint(Map<Restaurant, Integer> restaurantsWithPoints) {
+        return restaurantsWithPoints.values().stream()
+                .mapToInt(Integer::intValue)
+                .max()
+                .orElse(0);
+    }
+
+
+    public VoteReadTo getByDateAndUserId(LocalDate date, int userId) {
+        User user = userRepository.getExisted(userId);
+        Vote vote = repository.getByDateAndUserId(date, user.getId())
+                .orElseThrow(() -> new NotFoundException("Vote is not found"));
+
+        return VoteUtil.mapperTo(vote);
     }
 }
