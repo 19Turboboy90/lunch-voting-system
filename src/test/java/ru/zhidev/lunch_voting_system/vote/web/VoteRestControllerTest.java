@@ -15,6 +15,7 @@ import ru.zhidev.lunch_voting_system.vote.to.VoteReadWinnerTo;
 import ru.zhidev.lunch_voting_system.vote.to.VoteWriteTo;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -29,6 +30,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = GUEST_MAIL)
     void saveFirstVoteForUser() throws Exception {
+        mockTime(LocalDate.now(), LocalTime.of(19, 30));
         VoteWriteTo newVote = new VoteWriteTo(RestaurantTestData.RESTAURANT_ID);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -47,6 +49,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void votingAfterElevenClockProhibited() throws Exception {
+        mockTime(LocalDate.now(), LocalTime.of(19, 30));
         VoteWriteTo newVote = new VoteWriteTo(RestaurantTestData.RESTAURANT_ID);
 
         perform(MockMvcRequestBuilders.post(REST_URL)

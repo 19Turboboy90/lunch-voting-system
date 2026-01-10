@@ -1,10 +1,8 @@
 package ru.zhidev.lunch_voting_system.vote.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import ru.zhidev.lunch_voting_system.AbstractServiceTest;
+import ru.zhidev.lunch_voting_system.AbstractTest;
 import ru.zhidev.lunch_voting_system.restaurant.RestaurantTestData;
 import ru.zhidev.lunch_voting_system.vote.error.VoteTimeExpiredException;
 import ru.zhidev.lunch_voting_system.vote.model.Vote;
@@ -12,7 +10,9 @@ import ru.zhidev.lunch_voting_system.vote.to.VoteReadTo;
 import ru.zhidev.lunch_voting_system.vote.to.VoteReadWinnerTo;
 import ru.zhidev.lunch_voting_system.vote.util.VoteUtil;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,25 +22,14 @@ import static ru.zhidev.lunch_voting_system.user.UserTestData.GUEST_ID;
 import static ru.zhidev.lunch_voting_system.user.UserTestData.USER_ID;
 import static ru.zhidev.lunch_voting_system.vote.VoteTestData.*;
 
-class VoteServiceTest extends AbstractServiceTest {
+class VoteServiceTest extends AbstractTest {
 
     @Autowired
     private VoteService service;
 
-    @MockitoBean
-    private Clock clock;
-
-    private final ZoneId zone = ZoneId.systemDefault();
-
-    @BeforeEach
-    void setup() {
-        when(clock.getZone()).thenReturn(zone);
-    }
-
     @Test
     void voteFirstTime() {
-        LocalDateTime fixedTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(19, 30));
-        when(clock.instant()).thenReturn(fixedTime.atZone(zone).toInstant());
+        mockTime(LocalDate.now(), LocalTime.of(19, 30));
 
         Vote vote = service.saveOrUpdate(RestaurantTestData.RESTAURANT_ID, GUEST_ID);
 
@@ -49,8 +38,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void voteBeforeDeadline() {
-        LocalDateTime fixedTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 30));
-        when(clock.instant()).thenReturn(fixedTime.atZone(zone).toInstant());
+        mockTime(LocalDate.now(), LocalTime.of(10, 30));
 
         Vote firstVote = service.saveOrUpdate(RestaurantTestData.restaurant1.getId(), GUEST_ID);
         Vote secondVote = service.saveOrUpdate(RestaurantTestData.restaurant2.getId(), GUEST_ID);
