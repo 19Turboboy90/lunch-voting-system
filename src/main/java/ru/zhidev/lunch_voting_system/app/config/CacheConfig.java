@@ -15,6 +15,8 @@ import java.util.List;
 @EnableCaching
 @Profile("!test")
 public class CacheConfig {
+
+    public static final String USERS = "users";
     public static final String RESTAURANTS = "restaurants";
     public static final String RESTAURANT_BY_ID = "restaurantById";
     public static final String RESTAURANT_BY_NAME = "restaurantByName";
@@ -33,6 +35,7 @@ public class CacheConfig {
     public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(List.of(
+                new CaffeineCache(USERS, caffeine.build()),
                 new CaffeineCache(RESTAURANTS, caffeine.build()),
                 new CaffeineCache(RESTAURANT_BY_ID, caffeine.build()),
                 new CaffeineCache(RESTAURANT_BY_NAME, caffeine.build()),

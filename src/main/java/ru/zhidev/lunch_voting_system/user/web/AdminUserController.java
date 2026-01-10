@@ -1,7 +1,6 @@
 package ru.zhidev.lunch_voting_system.user.web;
 
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +37,14 @@ public class AdminUserController extends AbstractUserController {
     @GetMapping
     public List<User> getAll() {
         log.info("getAll");
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
+        return service.findAll();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
         log.info("create {}", user);
         checkIsNew(user);
-        User created = repository.prepareAndSave(user);
+        User created = service.prepareAndSave(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -57,13 +56,13 @@ public class AdminUserController extends AbstractUserController {
     public void update(@Valid @RequestBody User user, @PathVariable int id) {
         log.info("update {} with id={}", user, id);
         assureIdConsistent(user, id);
-        repository.prepareAndSave(user);
+        service.prepareAndSave(user);
     }
 
     @GetMapping("/by-email")
     public User getByEmail(@RequestParam String email) {
         log.info("getByEmail {}", email);
-        return repository.getExistedByEmail(email);
+        return service.getExistedByEmail(email);
     }
 
     @PatchMapping("/{id}")

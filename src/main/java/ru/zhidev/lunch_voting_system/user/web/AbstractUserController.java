@@ -6,11 +6,15 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import ru.zhidev.lunch_voting_system.user.model.User;
 import ru.zhidev.lunch_voting_system.user.repository.UserRepository;
+import ru.zhidev.lunch_voting_system.user.service.UserService;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public abstract class AbstractUserController {
     protected final Logger log = getLogger(getClass());
+
+    @Autowired
+    protected UserService service;
 
     @Autowired
     protected UserRepository repository;
