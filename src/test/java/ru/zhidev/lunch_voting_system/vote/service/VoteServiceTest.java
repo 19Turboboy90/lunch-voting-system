@@ -2,7 +2,7 @@ package ru.zhidev.lunch_voting_system.vote.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.zhidev.lunch_voting_system.AbstractTest;
+import ru.zhidev.lunch_voting_system.AbstractServiceTest;
 import ru.zhidev.lunch_voting_system.restaurant.RestaurantTestData;
 import ru.zhidev.lunch_voting_system.vote.error.VoteTimeExpiredException;
 import ru.zhidev.lunch_voting_system.vote.model.Vote;
@@ -22,7 +22,7 @@ import static ru.zhidev.lunch_voting_system.user.UserTestData.GUEST_ID;
 import static ru.zhidev.lunch_voting_system.user.UserTestData.USER_ID;
 import static ru.zhidev.lunch_voting_system.vote.VoteTestData.*;
 
-class VoteServiceTest extends AbstractTest {
+class VoteServiceTest extends AbstractServiceTest {
 
     @Autowired
     private VoteService service;

@@ -13,9 +13,9 @@ import static ru.zhidev.lunch_voting_system.user.UserTestData.admin;
 import static ru.zhidev.lunch_voting_system.user.UserTestData.user;
 
 public class VoteTestData {
-    public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingEqualsComparator(Vote.class);
-    public static final MatcherFactory.Matcher<VoteReadTo> VOTE_READ_TO_MATCHER = MatcherFactory.usingEqualsComparator(VoteReadTo.class);
-    public static final MatcherFactory.Matcher<VoteReadWinnerTo> VOTE_READ_TO_WINNER_MATCHER = MatcherFactory.usingEqualsComparator(VoteReadWinnerTo.class);
+    public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class);
+    public static final MatcherFactory.Matcher<VoteReadTo> VOTE_READ_TO_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(VoteReadTo.class);
+    public static final MatcherFactory.Matcher<VoteReadWinnerTo> VOTE_READ_TO_WINNER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(VoteReadWinnerTo.class);
 
     public static final int VOTE_ID = 1;
 

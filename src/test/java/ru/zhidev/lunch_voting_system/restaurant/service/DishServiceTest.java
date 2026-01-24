@@ -3,7 +3,7 @@ package ru.zhidev.lunch_voting_system.restaurant.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.zhidev.lunch_voting_system.AbstractTest;
+import ru.zhidev.lunch_voting_system.AbstractServiceTest;
 import ru.zhidev.lunch_voting_system.common.error.NotFoundException;
 import ru.zhidev.lunch_voting_system.restaurant.MenuTestData;
 import ru.zhidev.lunch_voting_system.restaurant.RestaurantTestData;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static ru.zhidev.lunch_voting_system.restaurant.DishTestData.*;
 
-class DishServiceTest extends AbstractTest {
+class DishServiceTest extends AbstractServiceTest {
 
     @Autowired
     private DishService service;
