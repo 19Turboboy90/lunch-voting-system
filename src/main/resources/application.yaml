@@ -30,11 +30,6 @@ spring:
     username: sa
     password:
 
-  # https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#common-application-properties-cache
-  cache:
-    type: caffeine
-    caffeine.spec: maximumSize=5000,expireAfterAccess=60s
-
   servlet:
     encoding:
       charset: UTF-8

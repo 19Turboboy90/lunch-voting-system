@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.zhidev.lunch_voting_system.common.error.NotFoundException;
@@ -16,8 +17,7 @@ import ru.zhidev.lunch_voting_system.restaurant.util.MenuUtil;
 
 import java.util.List;
 
-import static ru.zhidev.lunch_voting_system.app.config.CacheConfig.MENUS;
-import static ru.zhidev.lunch_voting_system.app.config.CacheConfig.MENU_BY_ID;
+import static ru.zhidev.lunch_voting_system.app.config.CacheConfig.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +29,11 @@ public class MenuService {
     private final RestaurantRepository restaurantRepository;
 
     @Transactional
-    @CacheEvict(value = {MENUS, MENU_BY_ID}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = MENUS, allEntries = true),
+            @CacheEvict(value = MENU_BY_ID, key = "#result.id"),
+            @CacheEvict(value = DISHES, allEntries = true)
+    })
     public Menu save(MenuTo menuTo, int restaurantId) {
         log.info("save: menuTo = {}, restaurantId =  {}", menuTo, restaurantId);
         Restaurant restaurant = restaurantRepository.getExisted(restaurantId);
@@ -40,7 +44,12 @@ public class MenuService {
     }
 
     @Transactional
-    @CacheEvict(value = {MENUS, MENU_BY_ID}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = MENUS, allEntries = true),
+            @CacheEvict(value = MENU_BY_ID, key = "#menuTo.id"),
+            @CacheEvict(value = DISHES, key = "#menuTo.id"),
+            @CacheEvict(value = DISH_BY_ID, allEntries = true)
+    })
     public void update(MenuTo menuTo, int restaurantId) {
         log.info("update: menuTo = {}, restaurantId =  {}", menuTo, restaurantId);
         Menu menu = getMenu(menuTo.getId(), restaurantId);
@@ -49,7 +58,12 @@ public class MenuService {
     }
 
     @Transactional
-    @CacheEvict(value = {MENUS, MENU_BY_ID}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = MENUS, allEntries = true),
+            @CacheEvict(value = MENU_BY_ID, key = "#menuId"),
+            @CacheEvict(value = DISHES, key = "#menuId"),
+            @CacheEvict(value = DISH_BY_ID, allEntries = true)
+    })
     public void delete(int menuId, int restaurantId) {
         log.info("delete: menuId = {}, restaurantId = {}", menuId, restaurantId);
         restaurantRepository.getExisted(restaurantId);

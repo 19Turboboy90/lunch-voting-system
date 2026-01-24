@@ -3,8 +3,8 @@ package ru.zhidev.lunch_voting_system.restaurant.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.zhidev.lunch_voting_system.common.error.NotFoundException;
@@ -29,7 +29,10 @@ public class DishService {
     private final MenuService menuService;
 
     @Transactional
-    @CacheEvict(value = {"dishes", "dishById"}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = DISHES, key = "#menuId"),
+            @CacheEvict(value = DISH_BY_ID, allEntries = true)
+    })
     public Dish save(DishTo dishTo, int menuId, int restaurantId) {
         log.info("save: dishTo = {}, menuId = {}, restaurantId =  {}", dishTo, menuId, restaurantId);
         Menu menu = menuService.getById(menuId, restaurantId);
@@ -40,7 +43,10 @@ public class DishService {
     }
 
     @Transactional
-    @CachePut(value = DISH_BY_ID, key = "#dishTo.id")
+    @Caching(evict = {
+            @CacheEvict(value = DISH_BY_ID, key = "#dishTo.id"),
+            @CacheEvict(value = DISHES, key = "#menuId")
+    })
     public void update(DishTo dishTo, int menuId, int restaurantId) {
         log.info("update: dishTo = {}, menuId = {}, restaurantId =  {}", dishTo, menuId, restaurantId);
         Menu menu = menuService.getById(menuId, restaurantId);
@@ -50,7 +56,10 @@ public class DishService {
     }
 
     @Transactional
-    @CacheEvict(value = {DISHES, DISH_BY_ID}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = DISH_BY_ID, key = "#dishId"),
+            @CacheEvict(value = DISHES, key = "#menuId")
+    })
     public void delete(int dishId, int menuId, int restaurantId) {
         log.info("delete: dishTo = {}, menuId = {}, restaurantId =  {}", dishId, menuId, restaurantId);
         Menu menu = menuService.getById(menuId, restaurantId);

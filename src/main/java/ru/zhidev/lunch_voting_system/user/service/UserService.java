@@ -2,7 +2,6 @@ package ru.zhidev.lunch_voting_system.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,6 @@ public class UserService {
 
     private final UserRepository repository;
 
-    @Cacheable(USERS)
     public List<User> findAll() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
     }

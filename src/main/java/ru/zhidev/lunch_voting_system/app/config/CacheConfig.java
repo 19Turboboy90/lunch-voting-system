@@ -3,13 +3,12 @@ package ru.zhidev.lunch_voting_system.app.config;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.caffeine.CaffeineCache;
-import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableCaching
@@ -28,22 +27,16 @@ public class CacheConfig {
     @Bean
     public Caffeine<Object, Object> caffeineConfig() {
         return Caffeine.newBuilder()
+                .expireAfterWrite(10, TimeUnit.MINUTES)
                 .maximumSize(500);
     }
 
     @Bean
     public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(List.of(
-                new CaffeineCache(USERS, caffeine.build()),
-                new CaffeineCache(RESTAURANTS, caffeine.build()),
-                new CaffeineCache(RESTAURANT_BY_ID, caffeine.build()),
-                new CaffeineCache(RESTAURANT_BY_NAME, caffeine.build()),
-                new CaffeineCache(MENUS, caffeine.build()),
-                new CaffeineCache(MENU_BY_ID, caffeine.build()),
-                new CaffeineCache(DISHES, caffeine.build()),
-                new CaffeineCache(DISH_BY_ID, caffeine.build())
-        ));
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager(
+                USERS, RESTAURANTS, RESTAURANT_BY_ID, RESTAURANT_BY_NAME, MENUS, MENU_BY_ID, DISHES, DISH_BY_ID
+        );
+        cacheManager.setCaffeine(caffeine);
         return cacheManager;
     }
 }
