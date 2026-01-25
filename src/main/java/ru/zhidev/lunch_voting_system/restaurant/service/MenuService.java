@@ -30,8 +30,8 @@ public class MenuService {
 
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = MENUS, allEntries = true),
-            @CacheEvict(value = MENU_BY_ID, key = "#result.id"),
+            @CacheEvict(value = MENUS, key = "#restaurantId"),
+            @CacheEvict(value = MENU_BY_ID, allEntries = true),
             @CacheEvict(value = DISHES, allEntries = true)
     })
     public Menu save(MenuTo menuTo, int restaurantId) {
@@ -45,10 +45,9 @@ public class MenuService {
 
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = MENUS, allEntries = true),
+            @CacheEvict(value = MENUS, key = "#restaurantId"),
             @CacheEvict(value = MENU_BY_ID, key = "#menuTo.id"),
-            @CacheEvict(value = DISHES, key = "#menuTo.id"),
-            @CacheEvict(value = DISH_BY_ID, allEntries = true)
+            @CacheEvict(value = DISHES, key = "#menuTo.id")
     })
     public void update(MenuTo menuTo, int restaurantId) {
         log.info("update: menuTo = {}, restaurantId =  {}", menuTo, restaurantId);
@@ -59,7 +58,7 @@ public class MenuService {
 
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = MENUS, allEntries = true),
+            @CacheEvict(value = MENUS,  key = "#restaurantId"),
             @CacheEvict(value = MENU_BY_ID, key = "#menuId"),
             @CacheEvict(value = DISHES, key = "#menuId"),
             @CacheEvict(value = DISH_BY_ID, allEntries = true)
