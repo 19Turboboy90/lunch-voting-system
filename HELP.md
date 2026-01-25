@@ -1,11 +1,14 @@
 # Read Me First
+
 The following was discovered as part of building this project:
 
-* The original package name 'ru.zhidev.lunch-voting-system' is invalid and this project uses 'ru.zhidev.lunch_voting_system' instead.
+* The original package name 'ru.zhidev.lunch-voting-system' is invalid and this project uses '
+  ru.zhidev.lunchvotingsystem' instead.
 
 # Getting Started
 
 ### Reference Documentation
+
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
@@ -20,6 +23,7 @@ For further reference, please consider the following sections:
 * [Testcontainers](https://java.testcontainers.org/)
 
 ### Guides
+
 The following guides illustrate how to use some features concretely:
 
 * [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
@@ -33,17 +37,18 @@ The following guides illustrate how to use some features concretely:
 
 ### Testcontainers support
 
-This project uses [Testcontainers at development time](https://docs.spring.io/spring-boot/3.5.9/reference/features/dev-services.html#features.dev-services.testcontainers).
+This project
+uses [Testcontainers at development time](https://docs.spring.io/spring-boot/3.5.9/reference/features/dev-services.html#features.dev-services.testcontainers).
 
 Testcontainers has been configured to use the following Docker images:
-
 
 Please review the tags of the used images and set them to the same as you're running in production.
 
 ### Maven Parent overrides
 
 Due to Maven's design, elements are inherited from the parent POM to the project POM.
-While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
+While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the
+parent.
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
 
