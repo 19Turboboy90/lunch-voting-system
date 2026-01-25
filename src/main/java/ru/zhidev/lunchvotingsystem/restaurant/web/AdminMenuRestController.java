@@ -27,9 +27,9 @@ public class AdminMenuRestController {
     private final MenuService service;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Menu> save(@PathVariable int restaurantId, @Valid @RequestBody MenuTo menu) {
-        log.info("save: restaurantId = {}, menu = {}", restaurantId, menu);
-        Menu created = service.save(menu, restaurantId);
+    public ResponseEntity<Menu> create(@PathVariable int restaurantId, @Valid @RequestBody MenuTo menu) {
+        log.info("create: restaurantId = {}, menu = {}", restaurantId, menu);
+        Menu created = service.create(menu, restaurantId);
 
         URI uriOfNewResource = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -46,7 +46,6 @@ public class AdminMenuRestController {
         assureIdConsistent(menu, menuId);
         service.update(menu, restaurantId);
     }
-
 
     @DeleteMapping("/{menuId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

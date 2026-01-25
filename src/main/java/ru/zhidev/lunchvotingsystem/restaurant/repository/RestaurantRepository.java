@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface RestaurantRepository extends BaseRepository<Restaurant> {
 
-    @Query("SELECT DISTINCT r FROM Restaurant r WHERE r.name LIKE %:name%")
+    @Query("SELECT r FROM Restaurant r WHERE r.name LIKE %:name%")
     List<Restaurant> getByName(@Param("name") String name);
 }

@@ -18,10 +18,9 @@ import ru.zhidev.lunchvotingsystem.vote.util.VoteUtil;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -39,10 +38,11 @@ public class VoteService {
     public Vote saveOrUpdate(int restaurantId, int userId) {
         log.info("saveOrUpdate:  restaurantId =  {}, userId = {}", restaurantId, userId);
 
-        final LocalDate dateOfVote = LocalDate.now(clock);
-        final LocalTime timeOfVote = LocalTime.now(clock);
+        final LocalDateTime localDateTime = LocalDateTime.now(clock);
+        final LocalDate dateOfVote = localDateTime.toLocalDate();
+        final LocalTime timeOfVote = localDateTime.toLocalTime();
 
-        User user = userRepository.getExisted(userId);
+        User user = userRepository.getReferenceById(userId);
         Restaurant restaurant = restaurantRepository.getExisted(restaurantId);
 
         return repository.getByUserIdAndDate(user.getId(), dateOfVote)
@@ -61,33 +61,26 @@ public class VoteService {
 
     public List<VoteReadWinnerTo> calculateResult(LocalDate date) {
         log.info("calculateResult:  date =  {}", date);
-        Map<Restaurant, Integer> restaurantsWithPoints = getRestaurantsWithPoints(date);
+        List<VoteReadWinnerTo> listRatingByDate = repository.getListRatingByDate(date);
+        if (listRatingByDate.isEmpty()) {
+            return List.of();
+        }
 
-        int maxPoint = getMaxPoint(restaurantsWithPoints);
+        long maxVotes = listRatingByDate.getFirst().numberOfVotes();
 
-        return restaurantsWithPoints.entrySet().stream()
-                .filter(v -> v.getValue() == maxPoint)
-                .map(ob -> new VoteReadWinnerTo(date, ob.getKey().getName(), maxPoint))
+        return listRatingByDate.stream()
+                .takeWhile(v -> v.numberOfVotes() == maxVotes)
                 .toList();
     }
 
-    private Map<Restaurant, Integer> getRestaurantsWithPoints(LocalDate date) {
-        return repository.getByDate(date)
-                .stream()
-                .collect(Collectors.groupingBy(Vote::getRestaurant, Collectors.summingInt(v -> 1)));
+    public List<VoteReadWinnerTo> showRatingForDate(LocalDate date) {
+        log.info("showRatingForDate:  date =  {}", date);
+        return repository.getListRatingByDate(date);
     }
-
-    private int getMaxPoint(Map<Restaurant, Integer> restaurantsWithPoints) {
-        return restaurantsWithPoints.values().stream()
-                .mapToInt(Integer::intValue)
-                .max()
-                .orElse(0);
-    }
-
 
     public VoteReadTo getByDateAndUserId(LocalDate date, int userId) {
-        User user = userRepository.getExisted(userId);
-        Vote vote = repository.getByDateAndUserId(date, user.getId())
+        User user = userRepository.getReferenceById(userId);
+        Vote vote = repository.getByUserIdAndDate(user.getId(), date)
                 .orElseThrow(() -> new NotFoundException("Vote is not found"));
 
         return VoteUtil.mapperTo(vote);

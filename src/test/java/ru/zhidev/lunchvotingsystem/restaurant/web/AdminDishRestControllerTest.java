@@ -32,7 +32,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void save() throws Exception {
+    void create() throws Exception {
         Dish newDish = DishTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(getUrl(RESTAURANT_ID, MENU_ID))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -48,7 +48,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void saveWithoutAccessRights() throws Exception {
+    void createWithoutAccessRights() throws Exception {
         Dish newDish = DishTestData.getNew();
         perform(MockMvcRequestBuilders.post(getUrl(RESTAURANT_ID, MENU_ID))
                 .contentType(MediaType.APPLICATION_JSON)

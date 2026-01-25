@@ -27,11 +27,11 @@ public class AdminDishRestController {
     private final DishService service;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> save(@PathVariable int restaurantId,
-                                     @PathVariable int menuId,
-                                     @Valid @RequestBody DishTo dish) {
-        log.info("save: restaurantId = {}, menuId ={}, dish = {}", restaurantId, menuId, dish);
-        Dish created = service.save(dish, menuId, restaurantId);
+    public ResponseEntity<Dish> create(@PathVariable int restaurantId,
+                                       @PathVariable int menuId,
+                                       @Valid @RequestBody DishTo dish) {
+        log.info("create: restaurantId = {}, menuId ={}, dish = {}", restaurantId, menuId, dish);
+        Dish created = service.create(dish, menuId, restaurantId);
 
         URI uriOfNewResource = ServletUriComponentsBuilder
                 .fromCurrentRequest()

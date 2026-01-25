@@ -33,8 +33,8 @@ public class DishService {
             @CacheEvict(value = DISHES, key = "#menuId"),
             @CacheEvict(value = DISH_BY_ID, allEntries = true)
     })
-    public Dish save(DishTo dishTo, int menuId, int restaurantId) {
-        log.info("save: dishTo = {}, menuId = {}, restaurantId =  {}", dishTo, menuId, restaurantId);
+    public Dish create(DishTo dishTo, int menuId, int restaurantId) {
+        log.info("create: dishTo = {}, menuId = {}, restaurantId =  {}", dishTo, menuId, restaurantId);
         Menu menu = menuService.getById(menuId, restaurantId);
 
         Dish dish = DishUtil.createNewFromTo(dishTo, menu);

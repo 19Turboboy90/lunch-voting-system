@@ -30,7 +30,7 @@ class AdminMenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void save() throws Exception {
+    void create() throws Exception {
         Menu newMenu = MenuTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(getUrl(RESTAURANT_ID))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -46,7 +46,7 @@ class AdminMenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void saveWithoutAccessRights() throws Exception {
+    void createWithoutAccessRights() throws Exception {
         Menu newMenu = MenuTestData.getNew();
         perform(MockMvcRequestBuilders.post(getUrl(RESTAURANT_ID))
                 .contentType(MediaType.APPLICATION_JSON)

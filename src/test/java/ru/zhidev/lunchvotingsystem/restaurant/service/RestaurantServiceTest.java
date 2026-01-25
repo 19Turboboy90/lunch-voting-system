@@ -19,9 +19,9 @@ class RestaurantServiceTest extends AbstractServiceTest {
     private RestaurantService service;
 
     @Test
-    void save() {
+    void create() {
         Restaurant restaurant = getNew();
-        Restaurant save = service.save(restaurant);
+        Restaurant save = service.create(restaurant);
         RESTAURANT_MATCHER.assertMatch(save, service.getById(save.getId()));
     }
 

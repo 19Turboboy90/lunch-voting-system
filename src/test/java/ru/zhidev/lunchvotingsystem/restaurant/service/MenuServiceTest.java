@@ -22,9 +22,9 @@ class MenuServiceTest extends AbstractServiceTest {
     private MenuService service;
 
     @Test
-    void save() {
+    void create() {
         MenuTo menuTo = getNewTo();
-        Menu save = service.save(menuTo, RestaurantTestData.RESTAURANT_ID);
+        Menu save = service.create(menuTo, RestaurantTestData.RESTAURANT_ID);
         MENU_MATCHER.assertMatch(save, service.getById(save.getId(), RestaurantTestData.RESTAURANT_ID));
     }
 

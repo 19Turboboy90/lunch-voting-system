@@ -21,9 +21,9 @@ class DishServiceTest extends AbstractServiceTest {
     private DishService service;
 
     @Test
-    void save() {
+    void create() {
         DishTo dishTo = getNewTo();
-        Dish save = service.save(dishTo, MenuTestData.MENU_ID, RestaurantTestData.RESTAURANT_ID);
+        Dish save = service.create(dishTo, MenuTestData.MENU_ID, RestaurantTestData.RESTAURANT_ID);
         DISH_MATCHER.assertMatch(save, service.getById(save.getId(), MenuTestData.MENU_ID, RestaurantTestData.RESTAURANT_ID));
     }
 

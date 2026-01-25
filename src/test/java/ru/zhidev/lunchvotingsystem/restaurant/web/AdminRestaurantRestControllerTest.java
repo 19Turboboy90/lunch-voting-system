@@ -31,7 +31,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void save() throws Exception {
+    void create() throws Exception {
         Restaurant newRestaurant = RestaurantTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -47,7 +47,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void saveWithoutAccessRights() throws Exception {
+    void createWithoutAccessRights() throws Exception {
         Restaurant newRestaurant = RestaurantTestData.getNew();
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)

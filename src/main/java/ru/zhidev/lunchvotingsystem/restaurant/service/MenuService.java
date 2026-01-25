@@ -34,8 +34,8 @@ public class MenuService {
             @CacheEvict(value = MENU_BY_ID, allEntries = true),
             @CacheEvict(value = DISHES, allEntries = true)
     })
-    public Menu save(MenuTo menuTo, int restaurantId) {
-        log.info("save: menuTo = {}, restaurantId =  {}", menuTo, restaurantId);
+    public Menu create(MenuTo menuTo, int restaurantId) {
+        log.info("create: menuTo = {}, restaurantId =  {}", menuTo, restaurantId);
         Restaurant restaurant = restaurantRepository.getExisted(restaurantId);
 
         Menu menu = MenuUtil.createNewFromTo(menuTo, restaurant);

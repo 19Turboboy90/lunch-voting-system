@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 public record VoteReadWinnerTo(
         LocalDate date,
+        Integer restaurantId,
         String restaurantName,
-        int numberOfVotes) {
+        Integer userId,
+        Long numberOfVotes) {
 }

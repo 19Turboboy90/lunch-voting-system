@@ -26,9 +26,9 @@ public class AdminRestaurantRestController {
     private final RestaurantService service;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> save(@Valid @RequestBody Restaurant restaurant) {
-        log.info("save: {}", restaurant);
-        Restaurant created = service.save(restaurant);
+    public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
+        log.info("create: {}", restaurant);
+        Restaurant created = service.create(restaurant);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")

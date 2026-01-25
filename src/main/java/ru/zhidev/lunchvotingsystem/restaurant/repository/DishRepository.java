@@ -11,9 +11,9 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface DishRepository extends BaseRepository<Dish> {
 
-    @Query("SELECT d FROM Dish d JOIN FETCH d.menu WHERE d.menu.id = :menuId")
+    @Query("SELECT d FROM Dish d WHERE d.menu.id = :menuId")
     List<Dish> getAll(int menuId);
 
-    @Query("SELECT d FROM Dish d JOIN FETCH d.menu m WHERE m.id = :menuId AND d.id = :dishId")
+    @Query("SELECT d FROM Dish d WHERE d.menu.id = :menuId AND d.id = :dishId")
     Optional<Dish> getByDishIdAndMenuId(int dishId, int menuId);
 }

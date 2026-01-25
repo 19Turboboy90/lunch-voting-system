@@ -3,7 +3,6 @@ package ru.zhidev.lunchvotingsystem.vote.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.zhidev.lunchvotingsystem.AbstractServiceTest;
-import ru.zhidev.lunchvotingsystem.restaurant.RestaurantTestData;
 import ru.zhidev.lunchvotingsystem.vote.error.VoteTimeExpiredException;
 import ru.zhidev.lunchvotingsystem.vote.model.Vote;
 import ru.zhidev.lunchvotingsystem.vote.to.VoteReadTo;
@@ -18,8 +17,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-import static ru.zhidev.lunchvotingsystem.user.UserTestData.GUEST_ID;
-import static ru.zhidev.lunchvotingsystem.user.UserTestData.USER_ID;
+import static ru.zhidev.lunchvotingsystem.restaurant.RestaurantTestData.*;
+import static ru.zhidev.lunchvotingsystem.user.UserTestData.*;
 import static ru.zhidev.lunchvotingsystem.vote.VoteTestData.*;
 
 class VoteServiceTest extends AbstractServiceTest {
@@ -31,19 +30,19 @@ class VoteServiceTest extends AbstractServiceTest {
     void voteFirstTime() {
         mockTime(LocalDate.now(), LocalTime.of(19, 30));
 
-        Vote vote = service.saveOrUpdate(RestaurantTestData.RESTAURANT_ID, GUEST_ID);
+        service.saveOrUpdate(RESTAURANT_ID, GUEST_ID);
 
-        VOTE_READ_TO_MATCHER.assertMatch(VoteUtil.mapperTo(vote), service.getByDateAndUserId(LocalDate.now(), GUEST_ID));
+        VOTE_READ_TO_MATCHER.assertMatch(service.getByDateAndUserId(LocalDate.now(), GUEST_ID), getVoteReadTo());
     }
 
     @Test
     void voteBeforeDeadline() {
         mockTime(LocalDate.now(), LocalTime.of(10, 30));
 
-        Vote firstVote = service.saveOrUpdate(RestaurantTestData.restaurant1.getId(), GUEST_ID);
-        Vote secondVote = service.saveOrUpdate(RestaurantTestData.restaurant2.getId(), GUEST_ID);
+        Vote firstVote = service.saveOrUpdate(restaurant1.getId(), GUEST_ID);
+        Vote secondVote = service.saveOrUpdate(restaurant2.getId(), GUEST_ID);
         assertEquals(firstVote.getId(), secondVote.getId());
-        assertEquals(RestaurantTestData.restaurant2, secondVote.getRestaurant());
+        assertEquals(restaurant2, secondVote.getRestaurant());
     }
 
     @Test
@@ -52,15 +51,17 @@ class VoteServiceTest extends AbstractServiceTest {
         when(clock.instant()).thenReturn(fixedTime.atZone(zone).toInstant());
 
         assertThrows(VoteTimeExpiredException.class,
-                () -> service.saveOrUpdate(RestaurantTestData.restaurant2.getId(), USER_ID));
+                () -> service.saveOrUpdate(restaurant2.getId(), USER_ID));
     }
 
     @Test
     void calculateResult() {
-        VoteReadWinnerTo winner1 = new VoteReadWinnerTo(LocalDate.now(), RestaurantTestData.restaurant1.getName(), 1);
-        VoteReadWinnerTo winner2 = new VoteReadWinnerTo(LocalDate.now(), RestaurantTestData.restaurant2.getName(), 1);
+        VoteReadWinnerTo winner1 =
+                new VoteReadWinnerTo(LocalDate.now(), restaurant1.getId(), restaurant1.getName(), user.getId(), 1L);
+        VoteReadWinnerTo winner2 =
+                new VoteReadWinnerTo(LocalDate.now(), restaurant2.getId(), restaurant2.getName(), admin.getId(), 1L);
         List<VoteReadWinnerTo> voteReadWinnerTos = service.calculateResult(LocalDate.now());
-        VOTE_READ_TO_WINNER_MATCHER.assertMatch(voteReadWinnerTos, List.of(winner2, winner1));
+        VOTE_READ_TO_WINNER_MATCHER.assertMatch(voteReadWinnerTos, List.of(winner1, winner2));
     }
 
     @Test

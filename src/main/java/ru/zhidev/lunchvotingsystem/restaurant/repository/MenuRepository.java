@@ -11,9 +11,9 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface MenuRepository extends BaseRepository<Menu> {
 
-    @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.restaurant.id = :restaurantId")
+    @Query("SELECT m FROM Menu m WHERE m.restaurant.id = :restaurantId")
     List<Menu> getAll(int restaurantId);
 
-    @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant r WHERE r.id = :restaurantId AND m.id = :menuId")
+    @Query("SELECT m FROM Menu m WHERE m.restaurant.id = :restaurantId AND m.id = :menuId")
     Optional<Menu> getByMenuIdAndRestaurantId(int menuId, int restaurantId);
 }

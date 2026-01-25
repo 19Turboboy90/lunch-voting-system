@@ -7,10 +7,10 @@ import java.time.LocalDate;
 @Builder
 public record VoteReadTo(
         LocalDate date,
+        Integer restaurantId,
         String restaurantName,
-
+        Integer userId,
         String userName,
-
         String email
 ) {
 }

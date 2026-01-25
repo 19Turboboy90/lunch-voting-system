@@ -65,6 +65,6 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .param("date", LocalDate.now().toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MatcherFactory.usingEqualsComparator(VoteReadWinnerTo.class).contentJson(winner2, winner1));
+                .andExpect(MatcherFactory.usingEqualsComparator(VoteReadWinnerTo.class).contentJson(winner1, winner2));
     }
 }

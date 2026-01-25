@@ -44,7 +44,7 @@ spring:
 logging:
   level:
     root: WARN
-    ru.zhidev.lunch_voting_system: DEBUG
+    ru.zhidev.lunchvotingsystem: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 springdoc.swagger-ui.path: /

@@ -27,8 +27,8 @@ public class RestaurantService {
             @CacheEvict(value = RESTAURANTS, allEntries = true),
             @CacheEvict(value = RESTAURANT_BY_NAME, allEntries = true)
     })
-    public Restaurant save(Restaurant restaurant) {
-        log.info("save {}", restaurant);
+    public Restaurant create(Restaurant restaurant) {
+        log.info("create {}", restaurant);
         return repository.save(restaurant);
     }
 
