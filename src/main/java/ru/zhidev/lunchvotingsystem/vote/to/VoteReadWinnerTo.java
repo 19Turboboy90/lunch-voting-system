@@ -6,6 +6,5 @@ public record VoteReadWinnerTo(
         LocalDate date,
         Integer restaurantId,
         String restaurantName,
-        Integer userId,
         Long numberOfVotes) {
 }

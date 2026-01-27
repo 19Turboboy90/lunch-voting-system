@@ -18,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static ru.zhidev.lunchvotingsystem.restaurant.RestaurantTestData.*;
-import static ru.zhidev.lunchvotingsystem.user.UserTestData.*;
+import static ru.zhidev.lunchvotingsystem.user.UserTestData.GUEST_ID;
+import static ru.zhidev.lunchvotingsystem.user.UserTestData.USER_ID;
 import static ru.zhidev.lunchvotingsystem.vote.VoteTestData.*;
 
 class VoteServiceTest extends AbstractServiceTest {
@@ -57,9 +58,9 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void calculateResult() {
         VoteReadWinnerTo winner1 =
-                new VoteReadWinnerTo(LocalDate.now(), restaurant1.getId(), restaurant1.getName(), user.getId(), 1L);
+                new VoteReadWinnerTo(LocalDate.now(), restaurant1.getId(), restaurant1.getName(), 1L);
         VoteReadWinnerTo winner2 =
-                new VoteReadWinnerTo(LocalDate.now(), restaurant2.getId(), restaurant2.getName(), admin.getId(), 1L);
+                new VoteReadWinnerTo(LocalDate.now(), restaurant2.getId(), restaurant2.getName(), 1L);
         List<VoteReadWinnerTo> voteReadWinnerTos = service.calculateResult(LocalDate.now());
         VOTE_READ_TO_WINNER_MATCHER.assertMatch(voteReadWinnerTos, List.of(winner1, winner2));
     }
@@ -68,6 +69,12 @@ class VoteServiceTest extends AbstractServiceTest {
     void calculateResultNoVotes() {
         List<VoteReadWinnerTo> voteReadWinnerTos = service.calculateResult(LocalDate.now().minusDays(1));
         VOTE_READ_TO_WINNER_MATCHER.assertMatch(voteReadWinnerTos, List.of());
+    }
+
+    @Test
+    void showRatingByDate() {
+        List<VoteReadWinnerTo> actualReadWinnerTos = service.showRatingByDate(LocalDate.now());
+        VOTE_READ_TO_WINNER_MATCHER.assertMatch(actualReadWinnerTos, winners);
     }
 
     @Test

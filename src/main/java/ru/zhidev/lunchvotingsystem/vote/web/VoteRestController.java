@@ -48,8 +48,8 @@ public class VoteRestController {
     }
 
     @GetMapping("/rating")
-    public List<VoteReadWinnerTo> showRatingForDate(@RequestParam LocalDate date) {
-        log.info("showRatingForDate: date = {}", date);
-        return service.showRatingForDate(date);
+    public List<VoteReadWinnerTo> showRatingByDate(@RequestParam LocalDate date) {
+        log.info("showRatingByDate: date = {}", date);
+        return service.showRatingByDate(date);
     }
 }

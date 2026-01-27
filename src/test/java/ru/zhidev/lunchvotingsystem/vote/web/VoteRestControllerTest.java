@@ -22,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.zhidev.lunchvotingsystem.user.UserTestData.GUEST_MAIL;
 import static ru.zhidev.lunchvotingsystem.user.UserTestData.USER_MAIL;
-import static ru.zhidev.lunchvotingsystem.vote.VoteTestData.*;
+import static ru.zhidev.lunchvotingsystem.vote.VoteTestData.VOTE_MATCHER;
+import static ru.zhidev.lunchvotingsystem.vote.VoteTestData.winners;
 import static ru.zhidev.lunchvotingsystem.vote.web.VoteRestController.REST_URL;
 
 class VoteRestControllerTest extends AbstractControllerTest {
@@ -60,11 +61,21 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void calculateResult() throws Exception {
+    void showWinnerByDate() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/winners")
                 .param("date", LocalDate.now().toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MatcherFactory.usingEqualsComparator(VoteReadWinnerTo.class).contentJson(winner1, winner2));
+                .andExpect(MatcherFactory.usingEqualsComparator(VoteReadWinnerTo.class).contentJson(winners));
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void showRatingByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/rating")
+                .param("date", LocalDate.now().toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MatcherFactory.usingEqualsComparator(VoteReadWinnerTo.class).contentJson(winners));
     }
 }

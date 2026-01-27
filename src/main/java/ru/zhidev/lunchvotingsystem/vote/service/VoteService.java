@@ -73,7 +73,7 @@ public class VoteService {
                 .toList();
     }
 
-    public List<VoteReadWinnerTo> showRatingForDate(LocalDate date) {
+    public List<VoteReadWinnerTo> showRatingByDate(LocalDate date) {
         log.info("showRatingForDate:  date =  {}", date);
         return repository.getListRatingByDate(date);
     }

@@ -6,6 +6,7 @@ import ru.zhidev.lunchvotingsystem.vote.to.VoteReadTo;
 import ru.zhidev.lunchvotingsystem.vote.to.VoteReadWinnerTo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static ru.zhidev.lunchvotingsystem.restaurant.RestaurantTestData.restaurant1;
 import static ru.zhidev.lunchvotingsystem.restaurant.RestaurantTestData.restaurant2;
@@ -27,9 +28,11 @@ public class VoteTestData {
     public static final Vote vote2 = new Vote(VOTE_ID + 1, restaurant2, admin, LocalDate.now());
 
     public static final VoteReadWinnerTo winner1 =
-            new VoteReadWinnerTo(LocalDate.now(), restaurant1.getId(), restaurant1.getName(), user.getId(), 1L);
+            new VoteReadWinnerTo(LocalDate.now(), restaurant1.getId(), restaurant1.getName(), 1L);
     public static final VoteReadWinnerTo winner2 =
-            new VoteReadWinnerTo(LocalDate.now(), restaurant2.getId(), restaurant2.getName(), admin.getId(), 1L);
+            new VoteReadWinnerTo(LocalDate.now(), restaurant2.getId(), restaurant2.getName(), 1L);
+
+    public static final List<VoteReadWinnerTo> winners = List.of(winner1, winner2);
 
     public static VoteReadTo getVoteReadTo() {
         return VoteReadTo.builder()

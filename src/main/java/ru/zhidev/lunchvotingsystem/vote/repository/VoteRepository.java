@@ -21,12 +21,11 @@ public interface VoteRepository extends BaseRepository<Vote> {
              v.dateOfVote,
              v.restaurant.id,
              v.restaurant.name,
-             v.user.id,
-             COUNT (v.user.id))
+             COUNT (v.restaurant.id))
              FROM Vote v
              WHERE v.dateOfVote =:date
-             GROUP BY v.dateOfVote, v.restaurant.id, v.restaurant.name
-             ORDER BY COUNT (v.user.id) DESC
+             GROUP BY v.dateOfVote, v.restaurant.name
+             ORDER BY COUNT (v.restaurant.id) DESC
             """)
     List<VoteReadWinnerTo> getListRatingByDate(LocalDate date);
 }
