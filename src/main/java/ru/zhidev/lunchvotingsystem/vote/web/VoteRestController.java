@@ -3,6 +3,7 @@ package ru.zhidev.lunchvotingsystem.vote.web;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,6 +40,14 @@ public class VoteRestController {
                 .buildAndExpand(created.getId())
                 .toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
+    }
+
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@Valid @RequestBody VoteWriteTo vote, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("update: vote.getRestaurantId() = {}, authUser.id() = {}", vote.getRestaurantId(), authUser.id());
+
+        service.saveOrUpdate(vote.getRestaurantId(), authUser.getUser().id());
     }
 
     @GetMapping("/winners")

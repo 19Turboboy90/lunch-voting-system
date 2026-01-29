@@ -12,9 +12,9 @@ INSERT INTO restaurant(name)
 VALUES ('restaurant_1'),
        ('restaurant_2');
 
-INSERT INTO menu (name, restaurant_id)
-VALUES ('lunch', 1),
-       ('lunch', 2);
+INSERT INTO menu (name, restaurant_id, date_of_added)
+VALUES ('lunch', 1, CURRENT_DATE),
+       ('lunch', 2, CURRENT_DATE);
 
 INSERT INTO dish(name, price, description, menu_id)
 VALUES ('egg', 12.12, 'egg', 1),

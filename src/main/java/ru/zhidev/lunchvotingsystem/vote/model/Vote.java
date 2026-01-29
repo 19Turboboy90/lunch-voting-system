@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "vote",
         schema = "public",
-        uniqueConstraints = {@UniqueConstraint(name = "user_id_date_of_vote", columnNames = {"user_id", "date_of_vote"})})
+        uniqueConstraints = {@UniqueConstraint(name = "date_of_vote_user_id", columnNames = {"date_of_vote", "user_id"})})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -42,12 +42,6 @@ public class Vote extends BaseEntity {
 
     public Vote(Integer id, Restaurant restaurant, User user, LocalDate dateOfVote) {
         super(id);
-        this.restaurant = restaurant;
-        this.user = user;
-        this.dateOfVote = dateOfVote;
-    }
-
-    public Vote(Restaurant restaurant, User user, LocalDate dateOfVote) {
         this.restaurant = restaurant;
         this.user = user;
         this.dateOfVote = dateOfVote;

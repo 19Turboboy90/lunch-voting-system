@@ -1,6 +1,7 @@
 package ru.zhidev.lunchvotingsystem.restaurant.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +9,8 @@ import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.zhidev.lunchvotingsystem.common.model.NamedEntity;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "menu",
@@ -19,14 +22,24 @@ import ru.zhidev.lunchvotingsystem.common.model.NamedEntity;
 @ToString
 public class Menu extends NamedEntity {
 
+    @Column(name = "date_of_added", nullable = false)
+    @NotNull
+    private LocalDate added;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false, referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
     private Restaurant restaurant;
 
-    public Menu(Integer id, String name) {
+    @PrePersist
+    void onCreate() {
+        this.added = LocalDate.now();
+    }
+
+    public Menu(Integer id, String name, LocalDate added) {
         super(id, name);
+        this.added = added;
     }
 
     public Menu(Integer id, String name, Restaurant restaurant) {

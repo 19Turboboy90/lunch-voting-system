@@ -4,6 +4,7 @@ import ru.zhidev.lunchvotingsystem.MatcherFactory;
 import ru.zhidev.lunchvotingsystem.restaurant.model.Menu;
 import ru.zhidev.lunchvotingsystem.restaurant.to.MenuTo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class MenuTestData {
@@ -13,12 +14,12 @@ public class MenuTestData {
 
     public static final int NOT_FOUND = 100;
 
-    public static final Menu menu1 = new Menu(MENU_ID, "lunch");
+    public static final Menu menu1 = new Menu(MENU_ID, "lunch", LocalDate.now());
 
     public static final List<Menu> menus = List.of(menu1);
 
     public static Menu getNew() {
-        return new Menu(null, "new menu");
+        return new Menu(null, "new menu", LocalDate.now());
     }
 
     public static MenuTo getNewTo() {
@@ -26,7 +27,7 @@ public class MenuTestData {
     }
 
     public static Menu getUpdated() {
-        return new Menu(MENU_ID, "update menu");
+        return new Menu(MENU_ID, "update menu", LocalDate.now());
     }
 
     public static MenuTo getUpdatedTo() {
