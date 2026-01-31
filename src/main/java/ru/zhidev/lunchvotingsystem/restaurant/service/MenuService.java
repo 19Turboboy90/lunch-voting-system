@@ -76,6 +76,12 @@ public class MenuService {
         return repository.getAll(restaurantId);
     }
 
+    public List<Menu> getAllWithDishes(int restaurantId) {
+        log.info("getAllWithDishes: restaurantId = {}", restaurantId);
+        restaurantRepository.getExisted(restaurantId);
+        return repository.getAllWithDishes(restaurantId);
+    }
+
     @Cacheable(value = MENU_BY_ID, key = "#menuId")
     public Menu getById(int menuId, int restaurantId) {
         log.info("get: menuId = {}, restaurantId = {}", menuId, restaurantId);

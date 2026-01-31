@@ -1,5 +1,7 @@
 package ru.zhidev.lunchvotingsystem.restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -20,6 +22,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @ToString
+@JsonPropertyOrder({"id", "name", "price", "description", "menu"})
 public class Dish extends NamedEntity {
 
     @Column(name = "price", nullable = false)
@@ -35,6 +38,7 @@ public class Dish extends NamedEntity {
     @JoinColumn(name = "menu_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
+    @JsonIgnore
     private Menu menu;
 
     public Dish(Integer id, String name, BigDecimal price, String description) {

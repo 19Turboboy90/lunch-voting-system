@@ -1,12 +1,15 @@
 package ru.zhidev.lunchvotingsystem.restaurant.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import ru.zhidev.lunchvotingsystem.common.model.NamedEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "restaurant",
@@ -15,9 +18,24 @@ import ru.zhidev.lunchvotingsystem.common.model.NamedEntity;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonPropertyOrder({"id", "name", "menus"})
 public class Restaurant extends NamedEntity {
+
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Menu> menus = new ArrayList<>();
 
     public Restaurant(Integer id, String name) {
         super(id, name);
+    }
+
+    public Restaurant(Integer id, String name, List<Menu> menus) {
+        super(id, name);
+        this.menus = menus;
+    }
+
+    public void addMenu(Menu menu) {
+        menus.add(menu);
+        menu.setRestaurant(this);
     }
 }

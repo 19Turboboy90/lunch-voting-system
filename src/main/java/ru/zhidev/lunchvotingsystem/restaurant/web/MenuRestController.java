@@ -28,6 +28,12 @@ public class MenuRestController {
         return service.getAll(restaurantId);
     }
 
+    @GetMapping("/with-dishes")
+    public List<Menu> getAllWithDishes(@PathVariable int restaurantId) {
+        log.info("getAllWithDishes: restaurantId  = {}", restaurantId);
+        return service.getAllWithDishes(restaurantId);
+    }
+
     @GetMapping("/{menuId}")
     public Menu getById(@PathVariable int restaurantId, @PathVariable int menuId) {
         log.info("get: restaurantId = {}, menuId = {}", restaurantId, menuId);

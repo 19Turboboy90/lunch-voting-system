@@ -1,5 +1,7 @@
 package ru.zhidev.lunchvotingsystem.restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -11,6 +13,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import ru.zhidev.lunchvotingsystem.common.model.NamedEntity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "menu",
@@ -20,16 +24,22 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @ToString
+@JsonPropertyOrder({"id", "name", "added", "dishes", "restaurant"})
 public class Menu extends NamedEntity {
 
     @Column(name = "date_of_added", nullable = false)
     @NotNull
     private LocalDate added;
 
+    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Dish> dishes = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false, referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
+    @JsonIgnore
     private Restaurant restaurant;
 
     @PrePersist
@@ -45,5 +55,10 @@ public class Menu extends NamedEntity {
     public Menu(Integer id, String name, Restaurant restaurant) {
         super(id, name);
         this.restaurant = restaurant;
+    }
+
+    public void addDish(Dish dish) {
+        dishes.add(dish);
+        dish.setMenu(this);
     }
 }

@@ -7,10 +7,14 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.zhidev.lunchvotingsystem.restaurant.model.Menu;
 import ru.zhidev.lunchvotingsystem.restaurant.model.Restaurant;
+import ru.zhidev.lunchvotingsystem.restaurant.repository.MenuRepository;
 import ru.zhidev.lunchvotingsystem.restaurant.repository.RestaurantRepository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static ru.zhidev.lunchvotingsystem.app.config.CacheConfig.*;
 
@@ -21,6 +25,7 @@ import static ru.zhidev.lunchvotingsystem.app.config.CacheConfig.*;
 public class RestaurantService {
 
     private final RestaurantRepository repository;
+    private final MenuRepository menuRepository;
 
     @Transactional
     @Caching(evict = {
@@ -63,6 +68,19 @@ public class RestaurantService {
     public List<Restaurant> getAll() {
         log.info("getAll");
         return repository.findAll();
+    }
+
+    public List<Restaurant> getAllWithMenu() {
+        log.info("getAllWithMenu");
+        List<Restaurant> restaurants = repository.findAll();
+        List<Menu> menus = menuRepository.getAllWithDishes();
+
+        Map<Integer, List<Menu>> menusByRestaurant = menus.stream()
+                .collect(Collectors.groupingBy(m -> m.getRestaurant().getId()));
+
+        restaurants.forEach(r -> r.setMenus(menusByRestaurant.getOrDefault(r.getId(), List.of())));
+
+        return restaurants;
     }
 
     @Cacheable(value = RESTAURANT_BY_ID, key = "#id")
