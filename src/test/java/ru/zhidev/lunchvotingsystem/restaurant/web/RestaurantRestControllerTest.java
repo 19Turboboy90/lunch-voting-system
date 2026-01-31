@@ -7,6 +7,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.zhidev.lunchvotingsystem.AbstractControllerTest;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -26,6 +27,15 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_MATCHER.contentJson(restaurants));
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void getAllWithMenu() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "with-menu"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER_WITH_MENU.contentJson(List.of(restaurantWithMenu1, restaurantWithMenu2)));
     }
 
     @Test

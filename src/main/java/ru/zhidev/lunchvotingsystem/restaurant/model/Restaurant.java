@@ -33,9 +33,4 @@ public class Restaurant extends NamedEntity {
         super(id, name);
         this.menus = menus;
     }
-
-    public void addMenu(Menu menu) {
-        menus.add(menu);
-        menu.setRestaurant(this);
-    }
 }

@@ -57,8 +57,14 @@ public class Menu extends NamedEntity {
         this.restaurant = restaurant;
     }
 
-    public void addDish(Dish dish) {
-        dishes.add(dish);
-        dish.setMenu(this);
+    public Menu(Integer id, String name, LocalDate added, List<Dish> dishes) {
+        super(id, name);
+        this.added = added;
+        this.dishes = dishes;
+    }
+
+    public Menu(LocalDate added, List<Dish> dishes) {
+        this.added = added;
+        this.dishes = dishes;
     }
 }

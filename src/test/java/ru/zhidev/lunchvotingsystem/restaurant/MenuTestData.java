@@ -7,6 +7,8 @@ import ru.zhidev.lunchvotingsystem.restaurant.to.MenuTo;
 import java.time.LocalDate;
 import java.util.List;
 
+import static ru.zhidev.lunchvotingsystem.restaurant.DishTestData.*;
+
 public class MenuTestData {
     public static final MatcherFactory.Matcher<Menu> MENU_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Menu.class, "restaurant", "dishes");
 
@@ -15,6 +17,9 @@ public class MenuTestData {
     public static final int NOT_FOUND = 100;
 
     public static final Menu menu1 = new Menu(MENU_ID, "lunch", LocalDate.now());
+
+    public static final Menu menuWithDishes1 = new Menu(MENU_ID, "lunch", LocalDate.now(), List.of(dish1, dish2));
+    public static final Menu menuWithDishes2 = new Menu(MENU_ID + 1, "lunch", LocalDate.now(), List.of(dish3, dish4));
 
     public static final List<Menu> menus = List.of(menu1);
 
