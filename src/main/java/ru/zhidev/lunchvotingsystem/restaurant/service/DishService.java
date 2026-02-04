@@ -16,8 +16,7 @@ import ru.zhidev.lunchvotingsystem.restaurant.util.DishUtil;
 
 import java.util.List;
 
-import static ru.zhidev.lunchvotingsystem.app.config.CacheConfig.DISHES;
-import static ru.zhidev.lunchvotingsystem.app.config.CacheConfig.DISH_BY_ID;
+import static ru.zhidev.lunchvotingsystem.app.config.CacheConfig.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,7 +30,8 @@ public class DishService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = DISHES, key = "#menuId"),
-            @CacheEvict(value = DISH_BY_ID, allEntries = true)
+            @CacheEvict(value = DISH_BY_ID, allEntries = true),
+            @CacheEvict(value = RESTAURANTS_WITH_MENUS, allEntries = true)
     })
     public Dish create(DishTo dishTo, int menuId, int restaurantId) {
         log.info("create: dishTo = {}, menuId = {}, restaurantId =  {}", dishTo, menuId, restaurantId);
@@ -45,7 +45,8 @@ public class DishService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = DISH_BY_ID, key = "#dishTo.id"),
-            @CacheEvict(value = DISHES, key = "#menuId")
+            @CacheEvict(value = DISHES, key = "#menuId"),
+            @CacheEvict(value = RESTAURANTS_WITH_MENUS, allEntries = true)
     })
     public void update(DishTo dishTo, int menuId, int restaurantId) {
         log.info("update: dishTo = {}, menuId = {}, restaurantId =  {}", dishTo, menuId, restaurantId);
@@ -58,7 +59,8 @@ public class DishService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = DISH_BY_ID, key = "#dishId"),
-            @CacheEvict(value = DISHES, key = "#menuId")
+            @CacheEvict(value = DISHES, key = "#menuId"),
+            @CacheEvict(value = RESTAURANTS_WITH_MENUS, allEntries = true)
     })
     public void delete(int dishId, int menuId, int restaurantId) {
         log.info("delete: dishTo = {}, menuId = {}, restaurantId =  {}", dishId, menuId, restaurantId);

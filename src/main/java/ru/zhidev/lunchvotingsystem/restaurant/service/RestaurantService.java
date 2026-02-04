@@ -30,7 +30,8 @@ public class RestaurantService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = RESTAURANTS, allEntries = true),
-            @CacheEvict(value = RESTAURANT_BY_NAME, allEntries = true)
+            @CacheEvict(value = RESTAURANT_BY_NAME, allEntries = true),
+            @CacheEvict(value = RESTAURANTS_WITH_MENUS, allEntries = true)
     })
     public Restaurant create(Restaurant restaurant) {
         log.info("create {}", restaurant);
@@ -41,7 +42,8 @@ public class RestaurantService {
     @Caching(evict = {
             @CacheEvict(value = RESTAURANTS, allEntries = true),
             @CacheEvict(value = RESTAURANT_BY_NAME, allEntries = true),
-            @CacheEvict(value = RESTAURANT_BY_ID, key = "#restaurant.id")
+            @CacheEvict(value = RESTAURANT_BY_ID, key = "#restaurant.id"),
+            @CacheEvict(value = RESTAURANTS_WITH_MENUS, allEntries = true)
     })
     public void update(Restaurant restaurant) {
         log.info("update {}", restaurant);
@@ -57,7 +59,8 @@ public class RestaurantService {
             @CacheEvict(value = MENUS, allEntries = true),
             @CacheEvict(value = MENU_BY_ID, allEntries = true),
             @CacheEvict(value = DISHES, allEntries = true),
-            @CacheEvict(value = DISH_BY_ID, allEntries = true)
+            @CacheEvict(value = DISH_BY_ID, allEntries = true),
+            @CacheEvict(value = RESTAURANTS_WITH_MENUS, allEntries = true)
     })
     public void delete(int id) {
         log.info("delete {}", id);
@@ -70,6 +73,7 @@ public class RestaurantService {
         return repository.findAll();
     }
 
+    @Cacheable(value = RESTAURANTS_WITH_MENUS)
     public List<Restaurant> getAllWithMenu() {
         log.info("getAllWithMenu");
         List<Restaurant> restaurants = repository.findAll();

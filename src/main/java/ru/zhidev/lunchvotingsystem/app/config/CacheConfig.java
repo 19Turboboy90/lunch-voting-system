@@ -23,6 +23,8 @@ public class CacheConfig {
     public static final String MENU_BY_ID = "menuById";
     public static final String DISHES = "dishes";
     public static final String DISH_BY_ID = "dishById";
+    public static final String MENUS_WITH_DISHES = "menusWithDishes";
+    public static final String RESTAURANTS_WITH_MENUS = "restaurantsWithMenus";
 
     @Bean
     public Caffeine<Object, Object> caffeineConfig() {
@@ -34,7 +36,8 @@ public class CacheConfig {
     @Bean
     public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager(
-                USERS, RESTAURANTS, RESTAURANT_BY_ID, RESTAURANT_BY_NAME, MENUS, MENU_BY_ID, DISHES, DISH_BY_ID
+                USERS, RESTAURANTS, RESTAURANT_BY_ID, RESTAURANT_BY_NAME, MENUS, MENU_BY_ID, DISHES, DISH_BY_ID,
+                MENUS_WITH_DISHES, RESTAURANTS_WITH_MENUS
         );
         cacheManager.setCaffeine(caffeine);
         return cacheManager;
